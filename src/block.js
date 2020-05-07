@@ -1,11 +1,11 @@
 /**
  *                          Block class
- *  The Block class is a main component into any Blockchain platform, 
+ *  The Block class is a main component into any Blockchain platform,
  *  it will store the data and act as a dataset for your application.
  *  The class will expose a method to validate the data... The body of
  *  the block will contain an Object that contain the data to be stored,
  *  the data should be stored encoded.
- *  All the exposed methods should return a Promise to allow all the methods 
+ *  All the exposed methods should return a Promise to allow all the methods
  *  run asynchronous.
  */
 
@@ -22,7 +22,7 @@ class Block {
 		this.time = 0;                                              // Timestamp for the Block creation
 		this.previousBlockHash = null;                              // Reference to the previous Block Hash
     }
-    
+
     /**
      *  validate() method will validate if the block has been tampered or not.
      *  Been tampered means that someone from outside the application tried to change
@@ -39,19 +39,20 @@ class Block {
         let self = this;
         return new Promise((resolve, reject) => {
             // Save in auxiliary variable the current block hash
-            const blockHash=self.hash;
+            let currentHash=self.hash;
             self.hash=null
-                            
+
             // Recalculate the hash of the Block
-            const currentBlockHash=SHA256(JSON.stringify(self)).toString()
+            let newHash=SHA256(JSON.stringify(self)).toString()
             // Comparing if the hashes changed
-            if(blockHash==currentBlockHash){
+            self.hash=currentHash;
+            if(currentHash==newHash){
                 resolve(true);
             }else{
                 resolve(false);
             }
             // Returning the Block is not valid
-            
+
             // Returning the Block is valid
 
         });
@@ -60,10 +61,10 @@ class Block {
     /**
      *  Auxiliary Method to return the block body (decoding the data)
      *  Steps:
-     *  
+     *
      *  1. Use hex2ascii module to decode the data
      *  2. Because data is a javascript object use JSON.parse(string) to get the Javascript Object
-     *  3. Resolve with the data and make sure that you don't need to return the data for the `genesis block` 
+     *  3. Resolve with the data and make sure that you don't need to return the data for the `genesis block`
      *     or Reject with an error.
      */
     getBData() {

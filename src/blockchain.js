@@ -117,10 +117,9 @@ class Blockchain {
     submitStar(address, message, signature, star) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            if(message.split(':').length===3){
                 let timestamp = parseInt(message.split(':')[1])
                 let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
-                if(currentTime - timestamp<=300000){
+                if(currentTime - timestamp<=300){
                   let isValid=bitcoinMessage.verify(message, address, signature)
                     if(isValid){
                         const block = await self._addBlock(new BlockClass.Block({
@@ -130,17 +129,15 @@ class Blockchain {
                         if(block){
                             resolve(block);
                         }else{
-                            resolve(null)
+                            reject("It would appear that message was not signed. Please try again :) " );
                         }
                     }else{
                         resolve(null)
                     }
                 }else{
-                    resolve(null)
+                    reject("5 minutes time exceeded :(");
                 }
-            }else{
-                resolve(null);
-            }
+
         });
     }
 
