@@ -209,10 +209,16 @@ class Blockchain {
             let prevBlockHash = null
             for (const block of self.chain) {
                 const isValid = await block.validate();
-                if (!isValid || block.previousBlockHash !== prevBlockHash) {
+                if (!isValid) {
                     errorLog.push({
                         block,
                         error: "Unable to validate block"
+                    })
+                }
+                if(block.previousBlockHash!==prevBlockHash){
+                    errorLog.push({
+                        block,
+                        error:"Unable to valid block"
                     })
                 }
                 prevBlockHash = block.prevBlockHash;
