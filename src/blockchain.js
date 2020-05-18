@@ -217,7 +217,12 @@ class Blockchain {
                 }
                 prevBlockHash = block.prevBlockHash;
             }
-            resolve(errorLog)
+            if(errorLog.length>0){
+                resolve(errorLog)
+            }else{
+                resolve([])
+            }
+        
         });
     }
 
